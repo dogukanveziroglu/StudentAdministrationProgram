@@ -7,7 +7,16 @@ public class Course {
 
 
     int id;
+    int grade;
     String name;
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
 
     public int getId() {
         return id;
