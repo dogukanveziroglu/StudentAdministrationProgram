@@ -1,25 +1,19 @@
 package models;
 
+import java.util.ArrayList;
+
 public class Course {
 
-    String id;
+
+
+    int id;
     String name;
-    int credit;
-    String teacherId;
 
-    public int getCredit() {
-        return credit;
-    }
-
-    public void setCredit(int credit) {
-        this.credit = credit;
-    }
-
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -31,11 +25,4 @@ public class Course {
         this.name = name;
     }
 
-    public String getTeacherId() {
-        return teacherId;
-    }
-
-    public void setTeacherId(String teacherId) {
-        this.teacherId = teacherId;
-    }
 }

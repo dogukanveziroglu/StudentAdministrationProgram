@@ -1,22 +1,34 @@
 package pages;
 
+import data.UserStore;
+import models.Course;
+import models.Student;
+import models.User;
+
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JList;
-import javax.swing.JComboBox;
-import javax.swing.JTextArea;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class StudentCoursesPage extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
+    DefaultListModel<String> studentModel;
+    DefaultListModel<String> courseModel;
+
+    public void filltheUserList() {
+        studentModel.removeAllElements();
+        for (User user : UserStore.users) {
+            if (user.getRole().equals("Student")) {
+                studentModel.addElement(user.getId() + " " + user.getName() + " " + user.getSurname());
+            }
+        }
+    }
 
     /**
      * Launch the application.
@@ -38,6 +50,7 @@ public class StudentCoursesPage extends JFrame {
      * Create the frame.
      */
     public StudentCoursesPage() {
+
         setTitle("Student Courses Panel");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
@@ -47,23 +60,90 @@ public class StudentCoursesPage extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JList listStudent = new JList();
-        listStudent.setBounds(6, 44, 159, 222);
-        contentPane.add(listStudent);
-
         JComboBox cbCourse = new JComboBox();
         cbCourse.setBounds(323, 40, 127, 27);
         contentPane.add(cbCourse);
 
-        JButton btnAdd = new JButton("Add Course");
-        btnAdd.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        studentModel = new DefaultListModel();
+        JList listStudent = new JList(studentModel);
+        filltheUserList();
+
+        listStudent.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+                int id = Integer.parseInt(listStudent.getSelectedValue().toString().split(" ")[0]);
+                courseModel.removeAllElements();
+
+                for (User user : UserStore.users) {
+                    if (user.getId() == id){
+
+                        Student stu = (Student) user;
+
+                        for (Course course: stu.studentCourses){
+                            courseModel.addElement(course.getId() + " " + course.getName());
+                        }
+
+                        for (Course c : CourseManagementPage.courses) {
+
+                            boolean alreadyEnrolled = stu.studentCourses.stream()
+                                    .anyMatch(enrolled -> enrolled.getId() == c.getId());
+
+                            if (!alreadyEnrolled) {
+                                cbCourse.addItem(c);
+                            }
+                        }
+
+
+                    }
+                }
+
             }
         });
+
+        courseModel = new DefaultListModel<>();
+        JList listCourse = new JList(courseModel);
+
+        listCourse.setBounds(171, 44, 140, 222);
+        contentPane.add(listCourse);
+
+        listStudent.setBounds(6, 44, 159, 222);
+        contentPane.add(listStudent);
+
+        JButton btnAdd = new JButton("Add Course");
+
         btnAdd.setBounds(327, 79, 117, 29);
         contentPane.add(btnAdd);
 
         JButton btnDelete = new JButton("Delete Course");
+
+        btnDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                int id = Integer.parseInt(listStudent.getSelectedValue().toString().split(" ")[0]);
+
+                for (User user : UserStore.users) {
+                    if (user.getId() == id){
+
+                        Student stu = (Student) user;
+
+                        int courseid = Integer.parseInt(listCourse.getSelectedValue().toString().split(" ")[0]);
+
+                        stu.studentCourses.removeIf(course -> course.getId() == courseid);
+
+                        courseModel.removeAllElements();
+
+                        for (Course course: stu.studentCourses){
+                            courseModel.addElement(course.getId() + " " + course.getName());
+                        }
+
+                    }
+                }
+
+            }
+        });
+
         btnDelete.setBounds(327, 120, 117, 29);
         contentPane.add(btnDelete);
 
@@ -75,12 +155,21 @@ public class StudentCoursesPage extends JFrame {
         lblCourseList.setBounds(177, 16, 93, 16);
         contentPane.add(lblCourseList);
 
-        JList listCourse = new JList();
-        listCourse.setBounds(171, 44, 140, 222);
-        contentPane.add(listCourse);
-
         JButton btnMainMenu = new JButton("Main Menu");
+
+        btnMainMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainMenu mainMenu = new MainMenu();
+                mainMenu.setVisible(true);
+                dispose();
+
+            }
+        });
+
         btnMainMenu.setBounds(327, 156, 117, 29);
         contentPane.add(btnMainMenu);
+
+        filltheUserList();
     }
 }

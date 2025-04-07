@@ -1,16 +1,20 @@
 package pages;
 
-import java.awt.EventQueue;
+import data.UserStore;
+import models.Student;
+import models.User;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JList;
-import javax.swing.JLabel;
-import javax.swing.JCheckBox;
-import javax.swing.JButton;
+
+
 
 public class AttendancePage extends JFrame {
+    DefaultListModel<String> model = new DefaultListModel<>();
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
@@ -35,6 +39,13 @@ public class AttendancePage extends JFrame {
      * Create the frame.
      */
     public AttendancePage() {
+
+        for(User u : UserStore.users){
+            if(u.getRole().equals("Student")){
+                model.addElement(u.getId() + " " + u.getName());
+            }
+        }
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 467, 311);
         contentPane = new JPanel();
@@ -43,7 +54,8 @@ public class AttendancePage extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JList listStudent = new JList();
+        JList listStudent = new JList(model);
+
         listStudent.setBounds(6, 54, 159, 222);
         contentPane.add(listStudent);
 
@@ -104,7 +116,73 @@ public class AttendancePage extends JFrame {
         contentPane.add(chckbx7);
 
         JButton btnMainMenu = new JButton("Main Menu");
-        btnMainMenu.setBounds(227, 248, 117, 29);
+
+        btnMainMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainMenu mainMenu = new MainMenu();
+                mainMenu.setVisible(true);
+                dispose();
+            }
+        });
+
+        btnMainMenu.setBounds(317, 248, 117, 29);
         contentPane.add(btnMainMenu);
+
+        JButton btnSave = new JButton("Save");
+
+        btnSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                int index = listStudent.getSelectedIndex();
+
+                if (index == -1){
+                    JOptionPane.showMessageDialog(contentPane,"Please select a student");
+                    return;
+                }
+
+                for(User u : UserStore.users){
+                    if(u.getId() == (Integer.parseInt(listStudent.getSelectedValue().toString().split(" ")[0]))){
+
+                        int totalAbsence = 0;
+                        if (chckbx1.isSelected()) totalAbsence++;
+                        if (chckbx2.isSelected()) totalAbsence++;
+                        if (chckbx3.isSelected()) totalAbsence++;
+                        if (chckbx4.isSelected()) totalAbsence++;
+                        if (chckbx5.isSelected()) totalAbsence++;
+                        if (chckbx6.isSelected()) totalAbsence++;
+                        if (chckbx7.isSelected()) totalAbsence++;
+                        if (chckbx8.isSelected()) totalAbsence++;
+                        if (chckbx9.isSelected()) totalAbsence++;
+                        if (chckbx10.isSelected()) totalAbsence++;
+                        if (chckbx11.isSelected()) totalAbsence++;
+                        if (chckbx12.isSelected()) totalAbsence++;
+
+                        Student student = (Student) u;
+                        student.setAbsence(totalAbsence);
+
+                        chckbx1.setSelected(false);
+                        chckbx2.setSelected(false);
+                        chckbx3.setSelected(false);
+                        chckbx4.setSelected(false);
+                        chckbx5.setSelected(false);
+                        chckbx6.setSelected(false);
+                        chckbx7.setSelected(false);
+                        chckbx8.setSelected(false);
+                        chckbx9.setSelected(false);
+                        chckbx10.setSelected(false);
+                        chckbx11.setSelected(false);
+                        chckbx12.setSelected(false);
+
+                    }
+                }
+
+            }
+        });
+
+
+        btnSave.setBounds(174, 247, 117, 29);
+        contentPane.add(btnSave);
     }
 }

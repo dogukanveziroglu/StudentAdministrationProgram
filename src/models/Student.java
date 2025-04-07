@@ -6,21 +6,23 @@ import java.util.Map;
 
 public class Student extends User{
 
-    ArrayList<Course> courses;
-    Map<Course, Integer> grades;
-    Map<Course, Integer> absence;
+    public ArrayList<Course> studentCourses = new ArrayList<>();
+    int absence;
 
-    public Student() {
-        this.courses = new ArrayList<>();
-        this.grades = new HashMap<>();
-        this.absence = new HashMap<>();
+    public int getAbsence() {
+        return absence;
     }
 
-    public Student(String id, String name, String surname, String email, String password) {
-        super(id, name, surname, email, password,"Student");
-        this.courses = new ArrayList<>();
-        this.grades = new HashMap<>();
-        this.absence = new HashMap<>();
+    public void setAbsence(int absence) {
+        this.absence = absence;
+    }
+
+    public Student() {
+
+    }
+
+    public Student(String email, int id, String name, String surname, String password) {
+        super(email, id, name, surname, password,"Student");
     }
 
 

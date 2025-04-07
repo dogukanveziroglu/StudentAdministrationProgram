@@ -1,24 +1,23 @@
 package pages;
 
+import models.Admin;
+import models.User;
+import data.UserStore;
+
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class LoginPage extends JFrame {
-
+    public static User currentUser;
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-    private JTextField txtUsername;
+    private JTextField txtEmail;
     private JPasswordField passwordField;
-
     /**
      * Launch the application.
      */
@@ -26,6 +25,17 @@ public class LoginPage extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
+                    User admin = new Admin();
+                    admin.setId(1);
+                    admin.setName("admin");
+                    admin.setSurname("");
+                    admin.setEmail("admin@example.com");
+                    admin.setPassword("admin123");
+                    UserStore.users.add(admin);
+
+
+
+
                     LoginPage frame = new LoginPage();
                     frame.setVisible(true);
                 } catch (Exception e) {
@@ -48,7 +58,7 @@ public class LoginPage extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JLabel lblNewLabel = new JLabel("Username");
+        JLabel lblNewLabel = new JLabel("E-mail");
         lblNewLabel.setBounds(23, 25, 72, 16);
         contentPane.add(lblNewLabel);
 
@@ -56,16 +66,50 @@ public class LoginPage extends JFrame {
         lblPassword.setBounds(23, 53, 61, 16);
         contentPane.add(lblPassword);
 
-        txtUsername = new JTextField();
-        txtUsername.setBounds(96, 20, 130, 26);
-        contentPane.add(txtUsername);
-        txtUsername.setColumns(10);
+        txtEmail = new JTextField();
+        txtEmail.setBounds(96, 20, 130, 26);
+        contentPane.add(txtEmail);
+        txtEmail.setColumns(10);
 
         passwordField = new JPasswordField();
         passwordField.setBounds(96, 48, 130, 26);
         contentPane.add(passwordField);
 
         JButton btnLogin = new JButton("Login");
+
+        btnLogin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String email = txtEmail.getText();
+                String password = new String(passwordField.getPassword());
+
+
+                boolean checkUser = false;
+                for (User user : UserStore.users) {
+                    if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+                        currentUser = user;
+                        checkUser = true;
+                        break;
+                    }
+                }
+
+                if(checkUser){
+                    MainMenu menu = new MainMenu();
+                    menu.setVisible(true);
+                    dispose();
+                    JOptionPane.showMessageDialog(contentPane,"Login Successful!");
+                }
+                else{
+                    JOptionPane.showMessageDialog(contentPane,"Login Failed!");
+                    txtEmail.setText("");
+                    passwordField.setText("");
+                }
+
+
+            }
+        });
+
         btnLogin.setBounds(96, 86, 117, 29);
         contentPane.add(btnLogin);
     }

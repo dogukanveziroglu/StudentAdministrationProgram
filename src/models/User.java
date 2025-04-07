@@ -2,12 +2,13 @@ package models;
 
 public class User {
 
-    String id,name,surname,email,password,role;
+    String name,surname,email,password,role;
+    int id;
 
     public User() {
     }
 
-    public User(String email, String id, String name, String surname, String password, String role) {
+    public User(String email, int id, String name, String surname, String password, String role) {
         this.email = email;
         this.id = id;
         this.surname = surname;
@@ -24,11 +25,11 @@ public class User {
         this.email = email;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

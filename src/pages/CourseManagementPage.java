@@ -1,22 +1,23 @@
 package pages;
 
+import models.Course;
+
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JList;
-import javax.swing.JButton;
-import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
+import java.util.ArrayList;
 
 public class CourseManagementPage extends JFrame {
+
+    public static ArrayList<Course> courses = new ArrayList<>();
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JTextField txtCourseName;
+    DefaultListModel<String> model;
 
     /**
      * Launch the application.
@@ -47,28 +48,55 @@ public class CourseManagementPage extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JList listCourse = new JList();
+        model = new DefaultListModel<>();
+        JList listCourse = new JList(model);
         listCourse.setBounds(6, 35, 158, 228);
         contentPane.add(listCourse);
 
         JButton btnAddCourse = new JButton("Add Course");
-        btnAddCourse.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-        btnAddCourse.setBounds(176, 73, 117, 29);
-        contentPane.add(btnAddCourse);
 
         txtCourseName = new JTextField();
         txtCourseName.setBounds(180, 35, 130, 26);
         contentPane.add(txtCourseName);
         txtCourseName.setColumns(10);
 
-        JButton btnDeleteCourse = new JButton("Delete Course");
-        btnDeleteCourse.addActionListener(new ActionListener() {
+
+        btnAddCourse.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
+                Course course = new Course();
+                course.setId(Integer.parseInt(txtCourseName.getText().split(" ")[0]));
+                course.setName(txtCourseName.getText().split(" ")[1]);
+
+                model.addElement(course.getId() + " " + course.getName());
+
+                courses.add(course);
+
+                txtCourseName.setText("");
+
             }
         });
+
+
+        btnAddCourse.setBounds(176, 73, 117, 29);
+        contentPane.add(btnAddCourse);
+
+        JButton btnDeleteCourse = new JButton("Delete Course");
+
+        btnDeleteCourse.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                courses.removeIf(c -> c.getId() == Integer.parseInt(listCourse.getSelectedValue().toString().split(" ")[0]));
+                model.removeAllElements();
+
+                for(Course c: courses){
+                    model.addElement(c.getId() + " " + c.getName());
+                }
+
+            }
+        });
+
         btnDeleteCourse.setBounds(176, 102, 117, 29);
         contentPane.add(btnDeleteCourse);
 
@@ -77,7 +105,21 @@ public class CourseManagementPage extends JFrame {
         contentPane.add(lblNewLabel);
 
         JButton btnMainMenu = new JButton("Main Menu");
+
+        btnMainMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainMenu mainMenu = new MainMenu();
+                mainMenu.setVisible(true);
+                dispose();
+            }
+        });
+
         btnMainMenu.setBounds(176, 131, 117, 29);
         contentPane.add(btnMainMenu);
+
+        JLabel lblName = new JLabel("Course Name");
+        lblName.setBounds(180, 19, 100, 16);
+        contentPane.add(lblName);
     }
 }

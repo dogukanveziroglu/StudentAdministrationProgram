@@ -45,22 +45,56 @@ public class TeacherPanel extends JFrame {
         contentPane.setLayout(null);
 
         JButton btnCourses = new JButton("Manage Courses");
+
         btnCourses.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                StudentCoursesPage coursesPage = new StudentCoursesPage();
+                coursesPage.setVisible(true);
+                dispose();
             }
         });
         btnCourses.setBounds(6, 62, 127, 29);
         contentPane.add(btnCourses);
 
         JButton btnGrades = new JButton("Assign grades");
+
+        btnGrades.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                StudentGradesPage gradesPage = new StudentGradesPage();
+                gradesPage.setVisible(true);
+                dispose();
+            }
+        });
+
         btnGrades.setBounds(135, 62, 121, 29);
         contentPane.add(btnGrades);
 
         JButton btnAttendance = new JButton("Attendance");
+
+        btnAttendance.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AttendancePage attendancePage = new AttendancePage();
+                attendancePage.setVisible(true);
+                dispose();
+            }
+        });
+
         btnAttendance.setBounds(6, 103, 127, 29);
         contentPane.add(btnAttendance);
 
         JButton btnLogout = new JButton("Logout");
+
+        btnLogout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LoginPage loginPage = new LoginPage();
+                loginPage.setVisible(true);
+                dispose();
+            }
+        });
+
         btnLogout.setBounds(135, 103, 121, 29);
         contentPane.add(btnLogout);
 
@@ -69,6 +103,16 @@ public class TeacherPanel extends JFrame {
         contentPane.add(lblNewLabel);
 
         JButton btnMainMenu = new JButton("Main Menu");
+
+        btnMainMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainMenu mainMenu = new MainMenu();
+                mainMenu.setVisible(true);
+                dispose();
+            }
+        });
+
         btnMainMenu.setBounds(76, 139, 117, 29);
         contentPane.add(btnMainMenu);
     }
